@@ -1,0 +1,53 @@
+from openai import OpenAI
+from tavily import TavilyClient
+
+# API Keys
+OPENAI_API_KEY = "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"
+TAVILY_API_KEY = "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"
+
+
+# Initialize clients
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
+tavily_client = TavilyClient(TAVILY_API_KEY)
+
+# Function to get a refined search prompt from OpenAI
+def generate_prompt(topic):
+    response = openai_client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{
+            "role": "user",
+            "content": f"Create a concise search query to find latest insights about: {topic}"
+        }]
+    )
+    return response.choices[0].message.content.strip()
+
+# Function to search the web using Tavily
+def search_web(prompt, max_results=3):
+    response = tavily_client.search(
+        query=prompt,
+        search_depth="advanced",
+        include_answer=True,
+        max_results=max_results
+    )
+    return response
+
+# Main program
+if __name__ == "__main__":
+    user_topic = "cricket"
+    
+    # Step 1: Get refined search prompt from OpenAI
+    refined_prompt = "iifa 2025"
+    print(f"\n🔍 Refined Prompt: {refined_prompt}\n")
+
+    # Step 2: Use Tavily to search the web
+    result = search_web(refined_prompt)
+
+    # Step 3: Display the results
+    if result and "results" in result:
+        for i, item in enumerate(result["results"], start=1):
+            print(f"Result {i}:")
+            print(f"Title   : {item.get('title')}")
+            print(f"URL     : {item.get('url')}")
+            print(f"Snippet : {item.get('content')}\n")
+    else:
+        print("No results found.")
