@@ -2,8 +2,8 @@ from openai import OpenAI
 from tavily import TavilyClient
 
 # API Keys
-OPENAI_API_KEY = "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"
-TAVILY_API_KEY = "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"
+OPENAI_API_KEY = "*************************"
+TAVILY_API_KEY = "tv************************"
 
 
 # Initialize clients
